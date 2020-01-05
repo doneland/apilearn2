@@ -13,7 +13,7 @@ import (
 
 var (
 	host     = "apipostgres"
-	port     = 5433
+	port     = 5432
 	user     = "apiadmin"
 	password = "Werty132"
 	dbname   = "apidb"
