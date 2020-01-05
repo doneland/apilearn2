@@ -10,16 +10,15 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 var (
 	host     = "localhost"
-	port     = 5432
-	user     = "apilearn_admin"
+	port     = 5433
+	user     = "apiadmin"
 	password = "Werty132"
-	dbname   = "apilearn"
+	dbname   = "apidb"
 )
 
 var (
@@ -28,10 +27,6 @@ var (
 )
 
 func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalln("Cannot opent .env file.")
-	}
-
 	host, _ = os.LookupEnv("DB_HOST")
 	p, _ := os.LookupEnv("DB_PORT")
 	port, _ = strconv.Atoi(p)
@@ -58,7 +53,7 @@ func (a *App) Get(w http.ResponseWriter, r *http.Request) {
 func (a *App) Cats(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"data": "found cats"}`))
+	w.Write([]byte(`{"data": "bad cats"}`))
 }
 
 // Trxs returns transactions.
