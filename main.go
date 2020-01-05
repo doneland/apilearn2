@@ -1,12 +1,16 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -23,7 +27,7 @@ var (
 	db      *sqlx.DB
 )
 
-/*func init() {
+func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalln("Cannot opent .env file.")
 	}
@@ -36,23 +40,41 @@ var (
 	dbname, _ = os.LookupEnv("DB_DBNAME")
 
 	log.Printf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-}*/
+}
 
-func get(w http.ResponseWriter, r *http.Request) {
+// App main environment component.
+type App struct {
+	DB *sqlx.DB
+}
+
+// Get returns base data.
+func (a *App) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"data": "works"}`))
 }
 
-func cats(w http.ResponseWriter, r *http.Request) {
+// Cats return information about cats.
+func (a *App) Cats(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"data": "found cats"}`))
 }
 
+// Trxs returns transactions.
+func (a *App) Trxs(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	trxs, err := FetchTrxs(a.DB)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	json.NewEncoder(w).Encode(trxs)
+}
+
 func main() {
 
-	/*db, err := sqlx.Connect("postgres", connStr)
+	db, err := sqlx.Connect("postgres", connStr)
 	if err != nil {
 		log.Fatalf("Connection to DB has failed, err: %s", err)
 	}
@@ -60,13 +82,20 @@ func main() {
 	if err != nil {
 		fmt.Println("DB Ping has failed.")
 	}
-	defer db.Close()*/
+	defer db.Close()
+
+	err = FetchCreateTrxTable(db)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	app := &App{DB: db}
 
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api/v1").Subrouter()
 
-	api.HandleFunc("/", get).Methods(http.MethodGet)
-	api.HandleFunc("/cats", cats).Methods(http.MethodGet)
+	api.HandleFunc("/", app.Get).Methods(http.MethodGet)
+	api.HandleFunc("/cats", app.Cats).Methods(http.MethodGet)
 
 	log.Fatalln(http.ListenAndServe(":8080", r))
 }
