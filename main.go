@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	host     = "localhost"
+	host     = "apipostgres"
 	port     = 5433
 	user     = "apiadmin"
 	password = "Werty132"
