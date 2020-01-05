@@ -4,12 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -26,7 +23,7 @@ var (
 	db      *sqlx.DB
 )
 
-func init() {
+/*func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalln("Cannot opent .env file.")
 	}
@@ -39,7 +36,7 @@ func init() {
 	dbname, _ = os.LookupEnv("DB_DBNAME")
 
 	log.Printf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-}
+}*/
 
 func get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -55,7 +52,7 @@ func cats(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	db, err := sqlx.Connect("postgres", connStr)
+	/*db, err := sqlx.Connect("postgres", connStr)
 	if err != nil {
 		log.Fatalf("Connection to DB has failed, err: %s", err)
 	}
@@ -63,7 +60,7 @@ func main() {
 	if err != nil {
 		fmt.Println("DB Ping has failed.")
 	}
-	defer db.Close()
+	defer db.Close()*/
 
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api/v1").Subrouter()
