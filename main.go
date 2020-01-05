@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
@@ -27,12 +25,12 @@ var (
 )
 
 func init() {
-	host, _ = os.LookupEnv("DB_HOST")
+	/*host, _ = os.LookupEnv("DB_HOST")
 	p, _ := os.LookupEnv("DB_PORT")
 	port, _ = strconv.Atoi(p)
 	user, _ = os.LookupEnv("DB_USER")
 	password, _ = os.LookupEnv("DB_PASSWORD")
-	dbname, _ = os.LookupEnv("DB_DBNAME")
+	dbname, _ = os.LookupEnv("DB_DBNAME")*/
 
 	log.Printf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 }
