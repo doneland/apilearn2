@@ -96,6 +96,7 @@ func main() {
 
 	api.HandleFunc("/", app.Get).Methods(http.MethodGet)
 	api.HandleFunc("/cats", app.Cats).Methods(http.MethodGet)
+	api.HandleFunc("/trxs", app.Trxs).Methods(http.MethodGet)
 
 	log.Fatalln(http.ListenAndServe(":8080", r))
 }
