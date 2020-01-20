@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
@@ -76,6 +77,24 @@ func (a *App) Trxs(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(trxs)
 }
 
+// TrxsAdd creates a transaction.
+func (a *App) TrxsAdd(w http.ResponseWriter, r *http.Request) {
+	t := &Trx{}
+
+	err := json.NewDecoder(r.Body).Decode(t)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	time.Sleep(time.Second * 10)
+
+	err = FetchTrxSave(a.DB, t)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+}
+
 func main() {
 
 	db, err := sqlx.Connect("postgres", connStr)
@@ -101,6 +120,7 @@ func main() {
 	api.HandleFunc("/", app.Get).Methods(http.MethodGet)
 	api.HandleFunc("/cats", app.Cats).Methods(http.MethodGet)
 	api.HandleFunc("/trxs", app.Trxs).Methods(http.MethodGet)
+	api.HandleFunc("/trxs", app.TrxsAdd).Methods(http.MethodPost)
 
 	log.Fatalln(http.ListenAndServe(":8080", r))
 }
