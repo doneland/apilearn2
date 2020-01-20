@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -25,14 +28,22 @@ var (
 )
 
 func init() {
-	/*host, _ = os.LookupEnv("DB_HOST")
-	p, _ := os.LookupEnv("DB_PORT")
+	// Load values from evironment file .env.
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found. Will move forward with environment variables or default values.")
+		cwd, _ := os.Getwd()
+		log.Println("Current diretory:", cwd)
+	}
+
+	host, _ = os.LookupEnv("SQL_HOST")
+	p, _ := os.LookupEnv("SQL_PORT")
 	port, _ = strconv.Atoi(p)
-	user, _ = os.LookupEnv("DB_USER")
-	password, _ = os.LookupEnv("DB_PASSWORD")
-	dbname, _ = os.LookupEnv("DB_DBNAME")*/
+	user, _ = os.LookupEnv("SQL_USER")
+	password, _ = os.LookupEnv("SQL_PASSWORD")
+	dbname, _ = os.LookupEnv("SQL_DATABASE")
 
 	log.Printf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	connStr = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 }
 
 // App main environment component.
