@@ -79,6 +79,7 @@ func (a *App) Trxs(w http.ResponseWriter, r *http.Request) {
 
 // TrxsAdd creates a transaction.
 func (a *App) TrxsAdd(w http.ResponseWriter, r *http.Request) {
+	log.Println("Request received.")
 	t := &Trx{}
 
 	err := json.NewDecoder(r.Body).Decode(t)
@@ -120,7 +121,7 @@ func main() {
 	api.HandleFunc("/", app.Get).Methods(http.MethodGet)
 	api.HandleFunc("/cats", app.Cats).Methods(http.MethodGet)
 	api.HandleFunc("/trxs", app.Trxs).Methods(http.MethodGet)
-	api.HandleFunc("/trxs", app.TrxsAdd).Methods(http.MethodPost)
+	api.HandleFunc("/trxsadd", app.TrxsAdd).Methods(http.MethodPost)
 
 	log.Fatalln(http.ListenAndServe(":8080", r))
 }
