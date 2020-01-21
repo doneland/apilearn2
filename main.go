@@ -89,11 +89,10 @@ func (a *App) TrxsAdd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("Start sleep.")
-	time.Sleep(time.Second * 10)
-	log.Print("Finished sleep.")
-
 	go func() {
+		log.Println("Start sleep.")
+		time.Sleep(time.Second * 10)
+		log.Print("Finished sleep.")
 		err = FetchTrxSave(a.DB, t)
 		if err != nil {
 			log.Println("error:", err)
