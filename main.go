@@ -86,11 +86,14 @@ func (a *App) TrxsAdd(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(t)
 	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
+	log.Println("Start sleep.")
 	time.Sleep(time.Second * 10)
+	log.Print("Finished sleep.")
 
 	err = FetchTrxSave(a.DB, t)
 	if err != nil {
