@@ -82,6 +82,8 @@ func (a *App) TrxsAdd(w http.ResponseWriter, r *http.Request) {
 	log.Println("Request received.")
 	t := &Trx{}
 
+	fmt.Println(r.Body)
+
 	err := json.NewDecoder(r.Body).Decode(t)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
