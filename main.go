@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -82,9 +83,15 @@ func (a *App) TrxsAdd(w http.ResponseWriter, r *http.Request) {
 	log.Println("Request received.")
 	t := &Trx{}
 
-	fmt.Println(r.Body)
+	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("error while reading request body:", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
 
-	err := json.NewDecoder(r.Body).Decode(t)
+	log.Println("request body:", string(b))
+
+	err = json.NewDecoder(r.Body).Decode(t)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
